@@ -13,7 +13,8 @@ def rfid_handler():
     if request.method == "GET":
         return rfid
     elif request.method == "POST":
-        rfid = request.get_json()["rfid"]
+        rfid = str(request.get_json()["id"])
+    return "OK"
 
 
 app.run(host="0.0.0.0",port=5000, debug=True)
