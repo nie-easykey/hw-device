@@ -11,7 +11,7 @@ def detected(id):
     body={
         "id":id
     }
-    r = requests.post("https://easykey-client.herokuapp.com/rfid", 
+    r = requests.post("http://localhost/rfid", 
                 json=body, 
                 headers={"content-type":"application/json"})
 
@@ -21,5 +21,7 @@ try:
             print(id)
             print(text)
             detected(id)
+except:
+    print("error occured")
 finally:
     GPIO.cleanup()
