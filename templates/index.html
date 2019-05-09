@@ -19,5 +19,15 @@
         <li>UPI ID</li>
     </ul>
     <button>Make Request</button>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        setInterval(function(){
+            $.get("localhost:5000/rfid", function(data){
+                $("#userid").val(data);
+            });
+        },1000);
+    </script>
 </body>
 </html>
