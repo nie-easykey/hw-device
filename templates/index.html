@@ -18,16 +18,76 @@
         <li>Emergency Contact</li>
         <li>UPI ID</li>
     </ul>
-    <button>Make Request</button>
+    <button id="makerequest">Make Request</button>
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
+
+        // set request to none, when no operation
+        var current_request = "none";
+
+        // id to username mapper
+        function getUsername(id){
+            if (id=="100") return "mridulganga"
+            else if (id=="200") return "abhinav"
+            
+        }
+
+        // keep updating the userid value with hw input
         setInterval(function(){
             $.get("/rfid", function(data){
                 $("#userid").val(data);
             });
         },1000);
+
+
+        // keep polling for the current request
+        setInterval(function(){
+            if (current_request!="none"){
+                $.get("http://easykey.herokuapp.com/request-status/" + 
+                    getUsername($("#userid").val()) +"/" + 
+                    current_request, function(data){
+                    if (data["status"] == "accepted"){
+                        alert("User Accepted Operation");
+                        console.log(data);
+                        current_request = "";
+                    }else if (data["status"]=="declined"){
+                        alert("User Declined Operation");
+                        current_request = "";
+                    }else{
+                        console.log("User didnt perform operation.");
+                    }
+                });
+            }
+        },1000);
+
+        // create a request for given id
+        $("#makerequest").click(function(){
+            $.ajax({
+                url: 'http://easykey.herokuapp.com/request',
+                type: 'post',
+                data: {
+                    "providername" : "Apollo Hospital",
+                    "type" : "Patient Registration",
+                    "description" : "Request for information to register new patient.",
+                    "fields" : ["upi", "email", "mobile", "address"],
+                    "success" : "success url",
+                    "failure" : "failure url",
+                    "username" : getUsername($("#userid").val())
+                },
+                headers: {
+                    "content-type": 'application/json'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.info(data);
+                    alert("Request Submitted");
+                    // set current request to the received request id
+                    current_request = data["request_id"];
+                }
+            });
+        });
     </script>
 </body>
 </html>
