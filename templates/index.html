@@ -7,6 +7,10 @@
     <title>Hospital Vendor</title>
 </head>
 <body>
+
+Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
+
+
     User : <input type="text" id="userid"> <br>
     Fields : 
     <ul>
@@ -29,9 +33,9 @@
 
         // id to username mapper
         function getUsername(id){
-            if (id=="100") return "mridulganga"
-            else if (id=="200") return "abhinav"
-            
+            if (id=="264695927509") return "mridulganga"
+            else if (id=="963070204596") return "abhinav"
+            return "mridulganga"
         }
 
         // keep updating the userid value with hw input
@@ -48,13 +52,13 @@
                 $.get("http://easykey.herokuapp.com/request-status/" + 
                     getUsername($("#userid").val()) +"/" + 
                     current_request, function(data){
-                    if (data["status"] == "accepted"){
+                    if (data["status"] == "approved"){
                         alert("User Accepted Operation");
                         console.log(data);
-                        current_request = "";
+                        current_request = "none";
                     }else if (data["status"]=="declined"){
                         alert("User Declined Operation");
-                        current_request = "";
+                        current_request = "none";
                     }else{
                         console.log("User didnt perform operation.");
                     }
@@ -67,24 +71,23 @@
             $.ajax({
                 url: 'http://easykey.herokuapp.com/request',
                 type: 'post',
-                data: {
-                    "providername" : "Apollo Hospital",
+                data:JSON.stringify( {
+                    "providername" : $("#vendorname").val(),
                     "type" : "Patient Registration",
                     "description" : "Request for information to register new patient.",
                     "fields" : ["upi", "email", "mobile", "address"],
                     "success" : "success url",
                     "failure" : "failure url",
                     "username" : getUsername($("#userid").val())
-                },
+                }),
                 headers: {
                     "content-type": 'application/json'
                 },
-                dataType: 'json',
                 success: function (data) {
                     console.info(data);
                     alert("Request Submitted");
                     // set current request to the received request id
-                    current_request = data["request_id"];
+                    current_request = data;
                 }
             });
         });
