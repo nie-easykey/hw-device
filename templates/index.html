@@ -13,6 +13,8 @@ Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
 
     User : <input type="text" id="userid"> <br>
     Fields : <input type="text" id="fields" value="upi,email,mobile,address"> <br>
+    Example Fields : aadhar, address, eemergency_email, email, emergency_mobile, emergency_name, mobile, pan, pi <br>
+    (no space in field names) <br>
 
     <ul hidden>
         <li>Name: <p id="r_name"></p> </li>
@@ -67,7 +69,7 @@ Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
                         var html_out = "";
 
                         jQuery.each(data, function(i, val) {
-                            html_out += '<b>'+i+'</b> : + ' + val + '<br>';
+                            html_out += '<b>'+i+'</b> : ' + val + '<br>';
                         });
 
                         $("#output").html(html_out);
