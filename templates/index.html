@@ -14,13 +14,11 @@ Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
     User : <input type="text" id="userid"> <br>
     Fields : 
     <ul>
-        <li>Name</li>
-        <li>Email</li>
-        <li>Mobile</li>
-        <li>Address</li>
-        <li>Emergency Name</li>
-        <li>Emergency Contact</li>
-        <li>UPI ID</li>
+        <li>Name: <p id="r_name"></p> </li>
+        <li>Email: <p id="r_email"></p></li>
+        <li>Mobile: <p id="r_mobile"></p></li>
+        <li>Address: <p id="r_address"></p></li>
+        <li>UPI ID: <p id="r_upi"></p></li>
     </ul>
     <button id="makerequest">Make Request</button>
 
@@ -55,6 +53,14 @@ Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
                     if (data["status"] == "approved"){
                         alert("User Accepted Operation");
                         console.log(data);
+                        
+                        $("r_name").html(data["username"]);
+                        $("r_email").html(data["email"]);
+                        $("r_mobile").html(data["mobile"]);
+                        $("r_address").html(data["address"]);
+                        $("r_upi").html(data["upi"]);
+
+
                         current_request = "none";
                     }else if (data["status"]=="declined"){
                         alert("User Declined Operation");
