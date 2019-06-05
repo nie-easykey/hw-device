@@ -12,14 +12,18 @@ Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
 
 
     User : <input type="text" id="userid"> <br>
-    Fields : 
-    <ul>
+    Fields : <input type="text" id="fields" value="upi,email,mobile,address"> <br>
+
+    <ul hidden>
         <li>Name: <p id="r_name"></p> </li>
         <li>Email: <p id="r_email"></p></li>
         <li>Mobile: <p id="r_mobile"></p></li>
         <li>Address: <p id="r_address"></p></li>
         <li>UPI ID: <p id="r_upi"></p></li>
     </ul>
+
+    <p id="output"></p>
+
     <button id="makerequest">Make Request</button>
 
 
@@ -54,12 +58,19 @@ Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
                         alert("User Accepted Operation");
                         console.log(data);
                         
-                        $("#r_name").html(data["username"]);
-                        $("#r_email").html(data["email"]);
-                        $("#r_mobile").html(data["mobile"]);
-                        $("#r_address").html(data["address"]);
-                        $("#r_upi").html(data["upi"]);
+                        // $("#r_name").html(data["username"]);
+                        // $("#r_email").html(data["email"]);
+                        // $("#r_mobile").html(data["mobile"]);
+                        // $("#r_address").html(data["address"]);
+                        // $("#r_upi").html(data["upi"]);
 
+                        var html_out = "";
+
+                        jQuery.each(data, function(i, val) {
+                            html_out += '<b>'+i+'</b> : + ' + val + '<br>';
+                        });
+
+                        $("#output").html(html_out);
 
                         current_request = "none";
                     }else if (data["status"]=="declined"){
@@ -74,6 +85,10 @@ Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
 
         // create a request for given id
         $("#makerequest").click(function(){
+
+            var f = $("#fields").val();
+            var f_list = f.split(",");
+
             $.ajax({
                 url: 'http://easykey.herokuapp.com/request',
                 type: 'post',
@@ -81,7 +96,7 @@ Vendor Name : <input type="text" id="vendorname" value="Apollo Hospital"> <br>
                     "providername" : $("#vendorname").val(),
                     "type" : "Patient Registration",
                     "description" : "Request for information to register new patient.",
-                    "fields" : ["upi", "email", "mobile", "address"],
+                    "fields" : f_list,
                     "success" : "success url",
                     "failure" : "failure url",
                     "username" : getUsername($("#userid").val())
